@@ -1,0 +1,778 @@
+
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#e3000b">
+<title>SPD-Adventskalender – 24 Türchen</title>
+
+<style>
+:root {
+  --red: #e3000b;
+  --dark: #a90008;
+  --cream: #fbf8f1;
+  --ink: #202020;
+  --muted: #686868;
+  --shadow: 0 8px 24px rgba(55,20,15,.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: radial-gradient(circle at 8% 4%,rgba(227,0,11,.055),transparent 22rem),var(--cream);
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+.page {
+  width: min(1160px,calc(100% - 32px));
+  margin: auto;
+  padding: 28px 0 48px;
+}
+
+header {
+  text-align: center;
+  padding: 10px 12px 26px;
+}
+
+.brandline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.spd-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 66px;
+  height: 48px;
+  background: var(--red);
+  color: white;
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+}
+
+.eyebrow {
+  color: var(--dark);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: var(--red);
+  font-size: clamp(2rem,6vw,4.2rem);
+  line-height: .98;
+  font-weight: 900;
+  letter-spacing: -.045em;
+}
+
+.subtitle {
+  margin: 13px 0 0;
+  font-size: clamp(1rem,2.2vw,1.35rem);
+  font-weight: 700;
+}
+
+.intro {
+  max-width: 660px;
+  margin: 12px auto 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.red-rule {
+  width: 94px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--red);
+  margin: 20px auto 0;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(6,minmax(0,1fr));
+  gap: 16px;
+}
+
+.door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+  aspect-ratio: 1/1.08;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid rgba(227,0,11,.18);
+  border-radius: 15px;
+  color: white;
+  background: var(--red);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .18s ease,box-shadow .18s ease;
+  text-align: left;
+}
+
+.door:hover,
+.door:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(55,20,15,.17);
+  outline: 2px solid var(--dark);
+  outline-offset: 2px;
+}
+
+.door:before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+.door-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 13px 0;
+  font-size: .67rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.door-number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: 1;
+  place-items: center;
+  font-size: clamp(2.8rem,6vw,5rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.07em;
+}
+
+.door-label {
+  position: relative;
+  z-index: 1;
+  padding: 0 12px 16px;
+  font-size: .8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.door.opened {
+  background: white;
+  color: var(--red);
+  border-color: rgba(227,0,11,.25);
+}
+
+.door.opened:before {
+  border-color: rgba(227,0,11,.35);
+}
+
+.door-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .2;
+}
+
+.door.opened .door-number {
+  color: var(--dark);
+}
+
+.door.opened .door-label {
+  background: rgba(255,255,255,.88);
+  margin: 0 7px 8px;
+  padding: 8px 5px;
+  border-radius: 7px;
+}
+
+/* Noch nicht freigeschaltete Türchen */
+.door:disabled {
+  opacity: .42;
+  cursor: not-allowed;
+  filter: grayscale(.5);
+  transform: none;
+  box-shadow: none;
+}
+
+.door:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 24px 0 0;
+}
+
+.tool-button {
+  border: 1px solid var(--red);
+  border-radius: 999px;
+  padding: 10px 17px;
+  background: transparent;
+  color: var(--dark);
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+footer {
+  margin-top: 30px;
+  text-align: center;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+dialog {
+  width: min(760px,calc(100% - 24px));
+  max-width: none;
+  max-height: 94vh;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 18px;
+  background: white;
+  color: var(--ink);
+  box-shadow: 0 24px 80px rgba(0,0,0,.35);
+}
+
+dialog::backdrop {
+  background: rgba(25,15,15,.72);
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--red);
+  color: white;
+}
+
+.modal-head strong {
+  font-size: 1rem;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px 24px 24px;
+}
+
+.modal-body img {
+  display: block;
+  width: 100%;
+  max-height: 52vh;
+  object-fit: contain;
+  margin: 0 auto 20px;
+  background: var(--cream);
+  border-radius: 8px;
+}
+
+.image-missing {
+  display: none;
+  padding: 20px;
+  border: 2px dashed #d7b9b9;
+  border-radius: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.story-heading {
+  margin: 0 0 10px;
+  color: var(--red);
+  font-size: clamp(1.35rem,3vw,1.8rem);
+  line-height: 1.15;
+}
+
+.story-copy {
+  font-size: 1rem;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* Frage direkt im hervorgehobenen Feld */
+.question {
+  display: block;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--red);
+  background: #fbf5f2;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+@media(max-width:900px) {
+  .calendar {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 13px;
+  }
+}
+
+@media(max-width:560px) {
+  .page {
+    width: min(100% - 22px,440px);
+    padding-top: 18px;
+  }
+
+  .calendar {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 9px;
+  }
+
+  .door { border-radius: 11px; }
+
+  .door-top {
+    padding: 10px 10px 0;
+    font-size: .55rem;
+  }
+
+  .door-number {
+    font-size: clamp(2.5rem,13vw,3.6rem);
+  }
+
+  .door-label {
+    padding: 0 6px 12px;
+    font-size: .66rem;
+  }
+
+  .door.opened .door-label {
+    margin: 0 5px 5px;
+    padding: 6px 3px;
+  }
+
+  .modal-body {
+    padding: 12px 14px 18px;
+  }
+
+  .story-copy { font-size: .96rem; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*:before,*:after { transition: none!important; }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+
+<header>
+  <div class="brandline">
+    <span class="spd-mark" aria-label="SPD">SPD</span>
+    <span class="eyebrow">24 Türchen · 24 sozialdemokratische Impulse</span>
+  </div>
+  <h1>Unser Adventskalender</h1>
+  <p class="subtitle">Jeden Tag ein neuer Impuls.</p>
+  <p class="intro">Öffne die Türchen und entdecke unsere 24 Adventsmotive.</p>
+  <div class="red-rule"></div>
+</header>
+
+<section class="calendar" id="calendar" aria-label="Die 24 Türchen des SPD-Adventskalenders"></section>
+
+<div class="toolbar">
+  <button class="tool-button" id="reset" type="button">
+    Fortschritt zurücksetzen
+  </button>
+</div>
+
+<footer>Ein Adventskalender des SPD-Ortsvereins · Frohe Adventszeit!</footer>
+</main>
+
+<dialog id="doorDialog" aria-labelledby="dialogTitle">
+  <div class="modal-head">
+    <strong id="dialogTitle">Türchen</strong>
+    <button class="close" id="closeDialog" type="button" aria-label="Schließen">×</button>
+  </div>
+
+  <div class="modal-body">
+    <img id="dialogImage" alt="">
+    <div class="image-missing" id="imageMissing">
+      Das Bild wurde nicht gefunden. Bitte prüfe den Dateinamen im Ordner <code>bilder</code>.
+    </div>
+    <h2 class="story-heading" id="storyHeading"></h2>
+    <div class="story-copy" id="storyCopy"></div>
+    <div class="question">
+      <span id="storyQuestion"></span>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+
+// ========================================
+// TESTMODUS
+// true  = Alle Türchen sofort öffnen
+// false = Freigabe nach Kalenderdatum
+// ========================================
+
+const TESTMODUS = true;
+
+
+// Prüft die Freigabe anhand der deutschen Ortszeit
+function isUnlocked(day) {
+
+  if (TESTMODUS) return true;
+
+  const parts = new Intl.DateTimeFormat("de-DE", {
+    timeZone: "Europe/Berlin",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric"
+  }).formatToParts(new Date());
+
+  const dateParts = {};
+  parts.forEach(part => {
+    dateParts[part.type] = Number(part.value);
+  });
+
+  const year = dateParts.year;
+  const month = dateParts.month;
+  const date = dateParts.day;
+
+  // Vor Dezember 2026 bleibt alles gesperrt
+  if (year < 2026) return false;
+  if (year === 2026 && month < 12) return false;
+
+  // Ab Januar 2027 sind alle Türchen freigeschaltet
+  if (year > 2026 || month > 12) return true;
+
+  // Im Dezember 2026 wird täglich ein Türchen freigegeben
+  return date >= day;
+}
+
+
+const stories = [
+  {
+    title: "Warum SPD?",
+    file: "SPD-Adventskalender_ Warum SPD_.png",
+    heading: "Warum SPD?",
+    body: "Die SPD ist mehr als ein Parteilogo und ein Wahlprogramm. Im Kern geht es um eine ziemlich einfache Frage: Wie schaffen wir ein Land, in dem alle Menschen gut leben können und faire Chancen haben? Dafür braucht es gute Arbeit, bezahlbare Wohnungen, gute Bildung und einen Sozialstaat, auf den man sich verlassen kann. Und es braucht Menschen, die sich einmischen. Denn Politik passiert nicht nur in Berlin, sondern genauso hier bei uns vor Ort, in den Gemeinden, Vereinen und Betrieben.",
+    question: "Was ist dir wichtig, damit unser Zusammenleben gerecht bleibt?"
+  },
+  {
+    title: "150 Jahre SPD – Geschichte im Advent",
+    file: "150 Jahre SPD_ Geschichte im Advent.png",
+    heading: "150 Jahre SPD – Geschichte im Advent",
+    body: "Die Geschichte der SPD beginnt nicht erst mit Willy Brandt oder der Kanzlerschaft von Gerhard Schröder. Ihre Wurzeln reichen bis ins Jahr 1863 zurück, als mit dem Allgemeinen Deutschen Arbeiterverein eine wichtige Organisation der Arbeiterbewegung entstand. Seitdem hat sich viel verändert. Sozialdemokratinnen und Sozialdemokraten haben für Demokratie, bessere Arbeitsbedingungen und soziale Rechte gekämpft, oft unter schwierigen Bedingungen. Vieles, was heute selbstverständlich wirkt, war es lange nicht. Und fertig ist die Geschichte noch lange nicht.",
+    question: "Welche Errungenschaft unserer Demokratie möchtest du auf keinen Fall missen?"
+  },
+  {
+    title: "Freiheit und Solidarität",
+    file: "SPD-Adventskalender_ Freiheit und Solidarität.png",
+    heading: "Freiheit und Solidarität",
+    body: "Freiheit klingt erst einmal nach: Ich kann tun und lassen, was ich möchte. Aber was ist mit jemandem, der sich die Ausbildung nicht leisten kann, keine bezahlbare Wohnung findet oder wegen einer Krankheit ausgebremst wird? Freiheit braucht Voraussetzungen. Dazu gehören Bildung, Sicherheit und echte Chancen. Solidarität sorgt dafür, dass Menschen nicht allein gelassen werden. Für uns gehört beides zusammen. Eine Gesellschaft ist nicht wirklich frei, wenn die Möglichkeiten nur für manche offenstehen.",
+    question: "Wo braucht es mehr Solidarität, damit Menschen tatsächlich frei entscheiden können?"
+  },
+  {
+    title: "Gerechtigkeit",
+    file: "Adventskalender der Gerechtigkeit.png",
+    heading: "Gerechtigkeit",
+    body: "Gerechtigkeit heißt nicht, dass alle das Gleiche haben oder dass jedes Leben gleich aussehen muss. Es heißt aber, dass Herkunft und Geldbeutel nicht darüber entscheiden sollten, welche Türen einem offenstehen. Ein Kind muss gute Chancen haben, egal in welchem Elternhaus es aufwächst. Wer arbeitet, muss davon leben können. Und wer Hilfe braucht, darf nicht durchs Raster fallen. Das klingt selbstverständlich, ist es aber längst nicht überall. Daran muss Politik gemessen werden.",
+    question: "Wo erlebst du, dass Chancen noch immer ungleich verteilt sind?"
+  },
+  {
+    title: "Solidarität im Adventskalender",
+    file: "Solidarität im Adventskalender.png",
+    heading: "Solidarität im Adventskalender",
+    body: "Solidarität ist kein großes Wort, das nur auf Parteitagen gut klingt. Sie zeigt sich ganz praktisch, wenn Nachbarn füreinander da sind, jemand im Verein Verantwortung übernimmt oder Menschen gemeinsam etwas auf die Beine stellen. Sie zeigt sich auch in politischen Entscheidungen, etwa bei guter Pflege, fairen Arbeitsbedingungen und sozialer Absicherung. Natürlich muss nicht jeder alles für jeden erledigen. Aber eine Gesellschaft funktioniert besser, wenn wir einander nicht egal sind.",
+    question: "Wann hat dir Zusammenhalt schon einmal ganz konkret geholfen?"
+  },
+  {
+    title: "Nikolaus-Special im SPD-Adventskalender",
+    file: "Nikolaus-Special im SPD-Adventskalender.png",
+    heading: "Nikolaus-Special im SPD-Adventskalender",
+    body: "Wenn der Nikolaus heute die politische Landschaft anschauen würde, hätte er vermutlich einiges zu verteilen. Ein bisschen weniger heiße Luft wäre schon ein guter Anfang. Dazu mehr Respekt im Umgang miteinander und Entscheidungen, die im Alltag tatsächlich etwas verbessern. Denn schöne Versprechen sind schnell gemacht. Entscheidend ist, was am Ende bei den Menschen ankommt. Vielleicht würde der Nikolaus auch daran erinnern, dass Politik kein Wettbewerb im Lautsein sein sollte, sondern Verantwortung für andere bedeutet.",
+    question: "Was sollte der Nikolaus der Politik dieses Jahr ins Stammbuch schreiben?"
+  },
+  {
+    title: "Arbeit muss sich lohnen",
+    file: "Arbeit muss sich lohnen.png",
+    heading: "Arbeit muss sich lohnen",
+    body: "Arbeit muss sich lohnen. Das sollte eigentlich keine besonders gewagte Forderung sein. Wer jeden Tag arbeitet, muss von seinem Lohn leben können. Der Mindestlohn setzt dafür eine wichtige Untergrenze. Tarifverträge können bessere Löhne und Arbeitsbedingungen sichern. Und gute Arbeit besteht nicht nur aus Geld. Dazu gehören Respekt, verlässliche Arbeitszeiten, Gesundheitsschutz und die Möglichkeit, im Betrieb mitzureden. Wer Leistung erwartet, muss auch faire Bedingungen schaffen.",
+    question: "Was gehört für dich zu einem guten und fairen Arbeitsplatz?"
+  },
+  {
+    title: "Bildung für alle",
+    file: "Bildung für alle_ Adventskalender-Türchen 8.png",
+    heading: "Bildung für alle",
+    body: "Bildung darf keine Frage des Elternhauses sein. Ein Kind sollte nicht schlechtere Chancen haben, nur weil zu Hause weniger Geld da ist oder die nächste gute Schule weit entfernt liegt. Gute Bildung beginnt in der Kita und hört nach der Ausbildung nicht auf. Sie braucht gut ausgestattete Einrichtungen, engagierte Menschen und Angebote, die erreichbar sind. Wer Bildung ernst nimmt, eröffnet nicht nur einzelnen Menschen Möglichkeiten, sondern stärkt unsere ganze Gesellschaft.",
+    question: "Was hat dir auf deinem eigenen Bildungsweg besonders geholfen?"
+  },
+  {
+    title: "Frauenrechte – Gleichberechtigung zählt",
+    file: "Frauenrechte_ Gleichberechtigung zählt.png",
+    heading: "Frauenrechte – Gleichberechtigung zählt",
+    body: "Gleichberechtigung steht im Gesetz, aber im Alltag ist sie noch lange nicht überall angekommen. Frauen verdienen in vielen Bereichen weniger, übernehmen einen großen Teil der unbezahlten Sorgearbeit und sind in Führungspositionen noch immer nicht gleich vertreten. Dazu kommt Gewalt gegen Frauen, die viel zu oft verharmlost wird. Es reicht nicht, Gleichstellung schön zu finden. Sie muss sich im Alltag zeigen, bei Bezahlung, Betreuung, Karrierechancen und beim Schutz vor Gewalt.",
+    question: "Wo muss sich deiner Meinung nach am dringendsten etwas ändern?"
+  },
+  {
+    title: "Demokratie lebt vom Mitmachen",
+    file: "Demokratie lebt vom Mitmachen.png",
+    heading: "Demokratie lebt vom Mitmachen",
+    body: "Demokratie besteht nicht nur daraus, alle paar Jahre einen Wahlzettel auszufüllen. Sie lebt davon, dass Menschen Fragen stellen, widersprechen, diskutieren und Verantwortung übernehmen. Das kann im Gemeinderat sein, im Verein, in einer Initiative oder ganz einfach im Gespräch mit den Nachbarn. Natürlich ist das manchmal mühsam. Man muss andere Meinungen aushalten und Kompromisse finden. Aber genau das ist Demokratie. Sie funktioniert nicht von allein, wir müssen sie mit Leben füllen.",
+    question: "Wo bringst du dich ein, oder wo würdest du gerne mehr mitreden?"
+  },
+  {
+    title: "Kommunalpolitik",
+    file: "Adventskalender Türchen 11_ Kommunalpolitik.png",
+    heading: "Kommunalpolitik – Was entscheidet eigentlich der Gemeinderat?",
+    body: "Kommunalpolitik klingt für manche erst einmal ziemlich trocken. Dabei geht es um Dinge, die wir jeden Tag sehen und nutzen: Straßen, Schulen, Kinderbetreuung, Feuerwehr, Baugebiete, öffentliche Einrichtungen und vieles mehr. Der Gemeinderat muss entscheiden, was gebraucht wird, was machbar ist und wofür das Geld reicht. Nicht jeder Wunsch lässt sich erfüllen. Aber genau deshalb ist es wichtig, dass Bürgerinnen und Bürger hinschauen und sich einbringen. Denn vor Ort merkt man ziemlich schnell, ob Politik funktioniert.",
+    question: "Was sollte sich in deiner Gemeinde dringend ändern?"
+  },
+  {
+    title: "Wohnen darf kein Luxus sein",
+    file: "Wohnen darf kein Luxus sein.png",
+    heading: "Wohnen darf kein Luxus sein",
+    body: "Eine Wohnung ist kein Luxusartikel. Sie ist der Ort, an dem wir leben, schlafen, unsere Kinder großziehen und zur Ruhe kommen. Wenn die Miete einen immer größeren Teil des Einkommens verschlingt, bleibt für vieles andere kaum noch etwas übrig. Das betrifft längst nicht nur Großstädte. Auch auf dem Land wird bezahlbarer Wohnraum für Familien, junge Menschen und ältere Menschen zum Problem. Wir brauchen mehr passende Wohnungen und eine Politik, die Wohnen als Teil der öffentlichen Daseinsvorsorge begreift.",
+    question: "Was würde bezahlbares Wohnen bei dir vor Ort leichter machen?"
+  },
+  {
+    title: "Europa im Advent",
+    file: "Europa im Advent_ SPD-Impuls.png",
+    heading: "Europa im Advent – Was Europa mit unserem Alltag zu tun hat",
+    body: "Europa wirkt manchmal weit weg. Dabei begegnet uns die Europäische Union ständig im Alltag, beim Reisen, beim Studieren, beim Einkaufen und bei vielen gemeinsamen Regeln, die Verbraucher und Umwelt schützen. Natürlich ist nicht jede Entscheidung aus Brüssel richtig, und Kritik muss erlaubt sein. Aber kein europäisches Land kann die großen Fragen unserer Zeit allein lösen. Frieden, Klimaschutz, wirtschaftliche Stärke und Sicherheit brauchen Zusammenarbeit. Europa ist nicht perfekt, aber wir sollten es besser machen, nicht kleinreden.",
+    question: "Welche europäische Errungenschaft möchtest du nicht mehr missen?"
+  },
+  {
+    title: "Soziale Sicherheit unter dem Schutzschirm",
+    file: "Soziale Sicherheit unter dem Schutzschirm.png",
+    heading: "Soziale Sicherheit unter dem Schutzschirm",
+    body: "Es läuft nicht immer alles nach Plan. Krankheit, Arbeitslosigkeit oder Pflegebedürftigkeit können das Leben von einem Tag auf den anderen verändern. Dann ist es gut, wenn man nicht allein dasteht. Genau dafür gibt es den Sozialstaat. Er federt Risiken ab und gibt Menschen die Möglichkeit, wieder auf die Beine zu kommen. Das ist keine Wohltat und auch kein Luxus. Es ist gemeinschaftliche Vorsorge. Wir alle können irgendwann darauf angewiesen sein.",
+    question: "Welche Form sozialer Absicherung gibt dir besonders viel Sicherheit?"
+  },
+  {
+    title: "Faktencheck",
+    file: "Adventskalender 15_ Faktencheck.png",
+    heading: "Faktencheck – Erst prüfen, dann teilen",
+    body: "Eine Nachricht macht wütend, ein angebliches Zitat passt perfekt ins eigene Weltbild, und schon ist der Teilen Knopf gedrückt. Genau da lohnt es sich, kurz innezuhalten. Wer steckt hinter der Meldung? Gibt es eine nachvollziehbare Quelle? Ist das Bild aktuell und gehört es wirklich zu dieser Geschichte? Ein Faktencheck muss nicht kompliziert sein. Ein paar Minuten prüfen können verhindern, dass wir Falschinformationen weiterverbreiten. Gerade in politischen Debatten sollten wir uns diese Mühe machen.",
+    question: "Wie prüfst du, ob eine politische Nachricht wirklich stimmt?"
+  },
+  {
+    title: "Mitbestimmung im Adventskalender",
+    file: "Mitbestimmung im Adventskalender.png",
+    heading: "Mitbestimmung – Betriebsräte und Arbeitnehmerrechte",
+    body: "Mitbestimmung am Arbeitsplatz ist keine nette Zugabe. Betriebsräte vertreten die Interessen der Beschäftigten und haben gesetzlich geregelte Rechte, wenn es um Arbeitszeiten, soziale Angelegenheiten oder personelle Fragen geht. Sie können dafür sorgen, dass Veränderungen nicht einfach über die Köpfe der Menschen hinweg beschlossen werden. Das ist wichtig, denn wer jeden Tag im Betrieb arbeitet, weiß oft ziemlich genau, wo es hakt und was besser laufen könnte. Demokratie sollte nicht am Werkstor enden.",
+    question: "Wie wichtig ist dir die Möglichkeit, am Arbeitsplatz mitzureden?"
+  },
+  {
+    title: "Klimaschutz sozial und gerecht",
+    file: "Klimaschutz sozial und gerecht.png",
+    heading: "Klimaschutz – sozial und gerecht",
+    body: "Klimaschutz ist notwendig. Aber er funktioniert nicht, wenn Menschen mit kleinen Einkommen am Ende die Rechnung allein bezahlen. Wer auf das Auto angewiesen ist, weil Bus und Bahn kaum fahren, braucht eine echte Alternative und keine Belehrung. Wer ein altes Haus besitzt, braucht Unterstützung bei der Sanierung. Klimapolitik muss deshalb sozial gedacht werden. Gute Angebote, bezahlbare Mobilität und verlässliche Förderung helfen mehr als bloße Appelle. Wir müssen Menschen beim Wandel mitnehmen.",
+    question: "Welche klimafreundliche Veränderung wäre bei dir vor Ort wirklich hilfreich?"
+  },
+  {
+    title: "Pflege mit Herz",
+    file: "Adventskalender_ Pflege mit Herz.png",
+    heading: "Pflege – Menschenwürde kennt kein Rentenalter",
+    body: "Pflege ist eine Aufgabe, die uns alle angeht. Viele Angehörige kümmern sich neben Beruf und Familie um Eltern oder Partner. Pflegekräfte leisten jeden Tag enorm viel, oft unter großem Zeitdruck. Und Menschen, die Pflege brauchen, wollen vor allem eines: respektvoll behandelt werden und möglichst selbstbestimmt leben. Dafür braucht es gute Arbeitsbedingungen, ausreichend Personal und Unterstützung für Angehörige. Pflege darf nicht zur privaten Belastungsprobe werden, bei der Familien sehen müssen, wie sie allein zurechtkommen.",
+    question: "Was müsste sich ändern, damit Pflegebedürftige und Angehörige besser unterstützt werden?"
+  },
+  {
+    title: "Jugend gestaltet Zukunft",
+    file: "SPD-Adventskalender_ Jugend gestaltet Zukunft.png",
+    heading: "Jugend gestaltet Zukunft",
+    body: "Junge Menschen sind nicht irgendwann einmal die Zukunft. Sie leben jetzt hier und sollten auch jetzt mitreden können. Was fehlt ihnen im Ort? Wo gibt es gute Treffpunkte, Freizeitangebote und sichere Wege? Wie sieht es mit Ausbildung, Busverbindungen und bezahlbarem Wohnraum aus? Wer möchte, dass junge Menschen bleiben, muss sie ernst nehmen und ihre Ideen einbeziehen. Es reicht nicht, über sie zu sprechen. Man sollte mit ihnen sprechen und sie entscheiden lassen, wo es möglich ist.",
+    question: "Was müsste sich bei dir vor Ort ändern, damit junge Menschen gerne bleiben?"
+  },
+  {
+    title: "Demokratie in Gefahr",
+    file: "SPD-Adventskalender_ Demokratie in Gefahr.png",
+    heading: "Demokratie in Gefahr? – Warum Populismus keine Lösungen bietet",
+    body: "Wenn für jedes Problem eine ganz einfache Antwort versprochen wird, macht man es sich meistens zu leicht. Populismus arbeitet mit Schuldzuweisungen und dem Versuch, Menschen gegeneinander auszuspielen. Die Wirklichkeit ist komplizierter. Demokratie lebt davon, dass wir streiten können, ohne einander die Würde abzusprechen. Das bedeutet nicht, Probleme schönzureden. Im Gegenteil: Wir müssen sie klar benennen und Lösungen finden. Aber eben mit Argumenten, Respekt und einem Blick auf das Ganze, nicht mit Feindbildern.",
+    question: "Wie schaffen wir es, hart in der Sache zu streiten und respektvoll miteinander zu bleiben?"
+  },
+  {
+    title: "Unsere Errungenschaften der Sozialdemokratie",
+    file: "Unsere Errungenschaften der Sozialdemokratie.png",
+    heading: "Unsere Errungenschaften – Was die Sozialdemokratie verändert hat",
+    body: "Viele Dinge, die heute selbstverständlich erscheinen, waren einmal hart umkämpft: Arbeitnehmerrechte, soziale Sicherung, demokratische Beteiligung und bessere Arbeitsbedingungen. Generationen von Menschen haben dafür gestritten, in Gewerkschaften, Parteien, Parlamenten und auf der Straße. Die SPD hat dabei eine wichtige Rolle gespielt, aber solche Veränderungen waren immer das Ergebnis gemeinsamer Arbeit. Darauf können wir stolz sein. Gleichzeitig ist Geschichte kein Grund, sich zurückzulehnen. Rechte müssen verteidigt und neue Herausforderungen angegangen werden.",
+    question: "Welche soziale oder demokratische Errungenschaft ist dir besonders wichtig?"
+  },
+  {
+    title: "Sozialdemokratischer Weihnachtswunsch – Zusammenhalt",
+    file: "Sozialdemokratischer Weihnachtswunsch_ Zusammenhalt.png",
+    heading: "Was noch fehlt – Welche politischen Aufgaben vor uns liegen",
+    body: "Es ist viel erreicht worden, aber fertig sind wir noch lange nicht. Bezahlbares Wohnen, gute Pflege, Bildung, sichere Arbeitsplätze und ein gerechter Umgang mit dem Klimawandel bleiben große Aufgaben. Dazu kommen ganz konkrete Fragen vor Ort: Wie bleiben unsere Gemeinden lebenswert? Wie kommen Menschen ohne Auto von A nach B? Und wie schaffen wir Angebote für Jung und Alt? Politik muss Prioritäten setzen und auch erklären, was nicht sofort geht. Entscheidend ist, dass wir nicht aufhören, Dinge besser machen zu wollen.",
+    question: "Welches Thema sollte in den nächsten Jahren ganz oben auf der politischen Agenda stehen?"
+  },
+  {
+    title: "Was noch fehlt – Adventsimpulse",
+    file: "Was noch fehlt_ Adventsimpulse.png",
+    heading: "Ein sozialdemokratischer Weihnachtswunsch – Zusammenhalt statt Spaltung",
+    body: "Zu Weihnachten wünschen wir uns ein bisschen mehr von dem, was im Alltag manchmal zu kurz kommt: Zeit füreinander, ein offenes Ohr und die Bereitschaft, aufeinander zuzugehen. Zusammenhalt heißt nicht, dass alle einer Meinung sein müssen. Es heißt, dass wir Unterschiede aushalten und trotzdem gemeinsam nach Lösungen suchen. Gerade in einer Zeit, in der vieles laut und gegeneinander läuft, ist das nicht wenig. Vielleicht beginnt eine solidarische Gesellschaft genau dort, wo wir einander nicht egal sind.",
+    question: "Wem möchtest du in diesem Jahr einfach einmal Danke sagen?"
+  },
+  {
+    title: "Frohe Weihnachten",
+    file: "SPD Adventskalender_ Frohe Weihnachten.png",
+    heading: "Frohe Weihnachten – Ein gemeinsamer Weihnachtsgruß",
+    body: "Ein ereignisreiches Jahr liegt hinter uns. Es gab viel zu tun, manches ist gelungen, anderes bleibt auf der Aufgabenliste. Jetzt wünschen wir euch und euren Familien erst einmal ruhige Feiertage, schöne Stunden mit den Menschen, die euch wichtig sind, und Zeit zum Durchatmen. Danke an alle, die sich in unserer Gemeinde engagieren, mithelfen, diskutieren und Verantwortung übernehmen. Wir freuen uns auf viele Begegnungen im neuen Jahr. Frohe Weihnachten und kommt gut ins neue Jahr!",
+    question: "Was wünschst du dir für unsere Gemeinde im kommenden Jahr?"
+  }
+];
+
+const STORAGE_KEY = "spd-adventskalender-2026-opened";
+
+const calendar = document.getElementById("calendar");
+const dialog = document.getElementById("doorDialog");
+const dialogTitle = document.getElementById("dialogTitle");
+const dialogImage = document.getElementById("dialogImage");
+const imageMissing = document.getElementById("imageMissing");
+const storyHeading = document.getElementById("storyHeading");
+const storyCopy = document.getElementById("storyCopy");
+const storyQuestion = document.getElementById("storyQuestion");
+
+let opened = new Set();
+
+try {
+  opened = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+} catch (_) {
+  opened = new Set();
+}
+
+const imagePath = day => "bilder/" + stories[day - 1].file;
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...opened]));
+  } catch (_) {}
+}
+
+function render() {
+  calendar.innerHTML = "";
+
+  stories.forEach((story, index) => {
+    const day = index + 1;
+    const unlocked = isUnlocked(day);
+
+    // Nur freigeschaltete Türchen können als geöffnet erscheinen
+    const isOpen = opened.has(day);
+    const isLocked = !unlocked;
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "door" + (isOpen ? " opened" : "");
+    button.disabled = isLocked;
+
+    button.setAttribute(
+      "aria-label",
+      isLocked
+        ? `Türchen ${day}, öffnet am ${day}. Dezember`
+        : `Türchen ${day}: ${story.title}`
+    );
+
+    button.innerHTML = `
+      ${isOpen ? `<img class="door-preview" src="${imagePath(day)}" alt="" onerror="this.style.display='none'">` : ""}
+      <span class="door-top">
+        <span>SPD</span>
+        <span>Advent</span>
+      </span>
+      <span class="door-number">${String(day).padStart(2,"0")}</span>
+      <span class="door-label">
+        ${isLocked ? `Ab ${day}. Dezember` : (isOpen ? story.title : "Türchen öffnen")}
+      </span>
+    `;
+
+    if (!isLocked) {
+      button.addEventListener("click", () => openDoor(day));
+    }
+
+    calendar.appendChild(button);
+  });
+}
+
+function openDoor(day) {
+  if (!isUnlocked(day)) return;
+
+  const story = stories[day - 1];
+
+  // Im Testmodus wird der Öffnungsstand nicht gespeichert
+  opened.add(day);
+  save();
+
+  render();
+
+  dialogTitle.textContent = `Türchen ${day}: ${story.title}`;
+  storyHeading.textContent = story.heading;
+  storyCopy.textContent = story.body;
+
+  // Die Frage erscheint direkt im hervorgehobenen Feld
+  storyQuestion.textContent = story.question;
+
+  dialogImage.alt = `SPD-Adventskalender, Türchen ${day}: ${story.title}`;
+  imageMissing.style.display = "none";
+  dialogImage.style.display = "block";
+
+  dialogImage.onload = () => {
+    dialogImage.style.display = "block";
+    imageMissing.style.display = "none";
+  };
+
+  dialogImage.onerror = () => {
+    dialogImage.style.display = "none";
+    imageMissing.style.display = "block";
+  };
+
+  dialogImage.src = imagePath(day);
+
+  if (!dialog.open) dialog.showModal();
+}
+
+document.getElementById("closeDialog").addEventListener("click", () => {
+  dialog.close();
+});
+
+dialog.addEventListener("click", event => {
+  if (event.target === dialog) dialog.close();
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (!confirm("Möchtest du den gespeicherten Öffnungsstand wirklich zurücksetzen?")) return;
+  opened.clear();
+  save();
+  render();
+});
+
+render();
+
+})();
+</script>
+</body>
+</html>
